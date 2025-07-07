@@ -10,7 +10,7 @@ services:
       - ./config:/config
       - ../certdumper/ssl/plex:/config/certs
       - /0/merged/personal/plexdb:/backup
-      - /tmp/plex:/transcode
+      - /0/local/keep_local/plex/transcode_temp:/transcode
       - /0/merged:/0:rshared
     devices:
       - /dev/dri/renderD128:/dev/dri/renderD128
