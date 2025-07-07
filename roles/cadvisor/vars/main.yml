@@ -2,10 +2,11 @@
 
 services:
   - name: cadvisor
-    image: gcr.io/cadvisor/cadvisor:v0.49.2
+    image: gcr.io/cadvisor/cadvisor:v0.52.1
     command:
       - --housekeeping_interval=20s
       - --docker_only
+      - - disable_metrics=disk,filesystem,perf_event,referenced_memory,hugetlb,network_routes,tcp_queues,udp_queues,resctrl
     networks:
       - monitoring
     volumes:
