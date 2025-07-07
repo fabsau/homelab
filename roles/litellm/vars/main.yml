@@ -1,0 +1,36 @@
+# vars/main.yml
+
+services:
+  - name: litellm
+    image: ghcr.io/berriai/litellm-non_root:main-stable
+    user: "{{ common_uid }}:{{ common_gid }}"
+    depends_on:
+      - litellm-postgres
+    env_file:
+      - ./litellm.env
+    volumes:
+      - ./config/litellm-config.yaml:/app/litellm-config.yaml
+    networks:
+      - litellm
+    traefik:
+      - name: litellm
+        protocol: http
+        entrypoint: https
+        http_redirection: true
+        enable_tls: true
+        rule: "Host(`{{ endpoints[role_specific][ansible_facts['hostname']] }}`)"
+        middlewares: private-chain@file
+        insecuretransport: false
+        service_port: 4000
+    watchtower: true
+
+  - name: litellm-postgres
+    image: postgres:alpine
+    env_file:
+      - ./litellm-postgres.env
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    networks:
+      - litellm
+    watchtower: true
+

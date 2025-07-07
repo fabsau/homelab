@@ -1,0 +1,84 @@
+model_list:
+  - model_name: o4-mini
+    litellm_params:
+      model: azure/o4-mini
+      api_base: "os.environ/AZURE_API_BASE"
+      api_key: "os.environ/AZURE_API_KEY"
+      api_version: "{{ AZURE_API_VERSION }}"
+  - model_name: o3-mini
+    litellm_params:
+      model: azure/o3-mini
+      api_base: "os.environ/AZURE_API_BASE"
+      api_key: "os.environ/AZURE_API_KEY"
+      api_version: "{{ AZURE_API_VERSION }}"
+  - model_name: gpt-4.1
+    litellm_params:
+      model: azure/gpt-4.1
+      api_base: "os.environ/AZURE_API_BASE"
+      api_key: "os.environ/AZURE_API_KEY"
+      api_version: "{{ AZURE_API_VERSION }}"
+  - model_name: gpt-4.1-mini
+    litellm_params:
+      model: azure/gpt-4.1-mini
+      api_base: "os.environ/AZURE_API_BASE"
+      api_key: "os.environ/AZURE_API_KEY"
+      api_version: "{{ AZURE_API_VERSION }}"
+  - model_name: gpt-4.1-nano
+    litellm_params:
+      model: azure/gpt-4.1-nano
+      api_base: "os.environ/AZURE_API_BASE"
+      api_key: "os.environ/AZURE_API_KEY"
+      api_version: "{{ AZURE_API_VERSION }}"
+  - model_name: text-embedding-3-large
+    litellm_params:
+      model: azure/text-embedding-3-large
+      api_base: "os.environ/AZURE_API_BASE"
+      api_key: "os.environ/AZURE_API_KEY"
+      api_version: "{{ AZURE_API_VERSION }}"
+  - model_name: Codestral-2501
+    litellm_params:
+      model: azure/responses/Codestral-2501-enrrs
+      api_base: "os.environ/AZURE_API_BASE"
+      api_key: "os.environ/AZURE_API_KEY"
+  - model_name: Cohere-rerank-v3-5
+    litellm_params:
+      model: azure_ai/Cohere-rerank-v3-5-vnddr
+      api_base: "os.environ/AZURE_RERANK_BASE"
+      api_key: "os.environ/AZURE_RERANK_API_KEY"
+  - model_name: gpt-4o-transcribe
+    litellm_params:
+      model: azure/gpt-4o-transcribe
+      api_base: "os.environ/AZURE_API_BASE"
+      api_key: "os.environ/AZURE_API_KEY"
+      api_version: "{{ AZURE_API_VERSION }}"
+    model_info:
+      mode: audio_transcription
+  - model_name: whisper-01
+    litellm_params:
+      model: azure/whisper-01
+      api_base: "os.environ/AZURE_API_BASE"
+      api_key: "os.environ/AZURE_API_KEY"
+      api_version: "{{ AZURE_API_VERSION }}"
+    model_info:
+      mode: audio_transcription
+  - model_name: gpt-4o-mini-tts
+    litellm_params:
+      model: azure/gpt-4o-mini-tts
+      api_base: "os.environ/LITELLM_GPT4o_TTS_URL"
+      api_key: "os.environ/LITELLM_GPT4o_TTS_API_KEY"
+      api_version: "{{ AZURE_API_VERSION }}"
+  - model_name: tts-hd
+    litellm_params:
+      model: azure/tts-hd
+      api_base: "os.environ/AZURE_API_BASE"
+      api_key: "os.environ/AZURE_API_KEY"
+      api_version: "{{ AZURE_API_VERSION }}"
+  - model_name: dall-e-3
+    litellm_params:
+      model: azure/dall-e-3
+      api_base: "os.environ/AZURE_API_BASE"
+      api_key: "os.environ/AZURE_API_KEY"
+      api_version: "{{ AZURE_API_VERSION }}"
+      base_model: dall-e-3
+    model_info:
+        mode: image_generation
