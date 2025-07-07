@@ -88,11 +88,13 @@ storage:
     path: /data/db.sqlite3
 notifier:
   disable_startup_check: true
-  smtp:
+  {# smtp:
     address: smtp://{{ AUTHELIA_SMTP_HOST }}:587
     username: {{ AUTHELIA_SMTP_USERNAME }}
     password: {{ AUTHELIA_SMTP_PASSWORD }}
-    sender: Authelia <authelia@sauna.re>
+    sender: Authelia <authelia@sauna.re> #}
+  filesystem:
+    filename: '/data/notification.txt'
 identity_providers:
   oidc:
     hmac_secret: {{ AUTHELIA_HMAC_SECRET }}
