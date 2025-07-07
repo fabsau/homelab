@@ -1,7 +1,7 @@
 # vars/main.yml
 services:
   - name: adguardexporter
-    image: csfreak/adguard-exporter:latest
+    image: ghcr.io/henrywhitaker3/adguard-exporter:latest
     env_file:
       - ./adguardexporter.env
     networks:
@@ -15,5 +15,5 @@ services:
         rule: "Host(`{{ endpoints[role_specific][ansible_facts['hostname']] }}`)"
         middlewares: private-chain@file
         insecuretransport: false
-        service_port: 9617
+        service_port: 9618
     watchtower: true
