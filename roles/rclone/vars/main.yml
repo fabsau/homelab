@@ -2,7 +2,7 @@
 
 services:
   - name: rclone
-    image: fabsau/rclone-mount:latest
+    image: ghcr.io/fabsau/rclone-mount:latest
     security_opt:
         - apparmor:unconfined
     devices:
