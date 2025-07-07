@@ -50,10 +50,13 @@ services:
   - name: plausible-events
     image: clickhouse/clickhouse-server:latest-alpine
     user: "{{ common_uid }}:{{ common_gid }}"
+    env_file:
+      - ./plausible-events.env
     volumes:
       - ./data/events/data:/var/lib/clickhouse
-      - ./data/events/clickhouse-config.xml:/etc/clickhouse-server/config.d/logging.xml:ro
-      - ./data/events/clickhouse-user-config.xml:/etc/clickhouse-server/users.d/logging.xml:ro
+      - ./config/clickhouse-config.xml:/etc/clickhouse-server/config.d/logging.xml:ro
+      - ./config/clickhouse-low-ressources.xml://etc/clickhouse-server/config.d/low-resources.xml:ro
+      # - ./data/events/clickhouse-user-config.xml:/etc/clickhouse-server/users.d/logging.xml:ro
     ulimits:
       nofile:
         soft: 262144
