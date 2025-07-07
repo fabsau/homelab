@@ -11,3 +11,6 @@ services:
       - ./ssl:/output:rw
       - ./config/plex.sh:/hook/hook.sh:ro
     watchtower: true
+
+config_files_settings:
+  role_file_permission_mode: '0500'
