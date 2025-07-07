@@ -11,8 +11,8 @@
           server: "{{ pbs_global_server }}"
           client:
             archives:
-              - name: docker2
-                path: /docker2
+              - name: docker
+                path: /docker
                 format: .pxar
               - name: root-home
                 path: /root
@@ -40,9 +40,6 @@
             archives:
               - name: docker
                 path: /docker
-                format: .pxar
-              - name: local
-                path: /0/local
                 format: .pxar
               - name: root-home
                 path: /root
