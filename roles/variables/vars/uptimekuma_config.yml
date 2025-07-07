@@ -1,6 +1,6 @@
 ---
 # Uptime Kuma API Configuration
-uptime_kuma_api_url: "https://uptime2.oiba.de"
+uptime_kuma_api_url: "https://uptime.oiba.de"
 uptime_kuma_username: "{{ UPTIMEKUMA_USER }}"
 uptime_kuma_password: "{{ UPTIMEKUMA_PASSWORD }}"
 

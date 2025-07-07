@@ -29,14 +29,12 @@ socks5_proxy_port: 1080
 
 # Traefik Whitelist
 traefik_whitelist_ips:
-  - 172.31.0.0/12
+  - 172.16.0.0/12
   - 192.168.251.0/24
   - 192.168.50.0/24
   - 192.168.100.0/24
   - 192.168.150.2/32
   - 100.64.0.2/24
-  - 195.90.209.53/32
-  - 185.128.247.106/32
 
 # Logrotate Settings
 logrotate_user: "{{ common_uid }}"
@@ -88,10 +86,6 @@ endpoint_hosts:
     uptimekuma_basic_monitoring: true
     uptimekuma_http_monitoring: true
     uptimekuma_container_monitoring: true
-  # azure:
-  #   ip:
-  #       - "172.187.202.93"
-  #       - "192.168.251.6"
   lxc1:
     ip:
       - "192.168.100.20"
@@ -118,7 +112,7 @@ endpoints:
     prometheus_exporter: true
   alertmanager:
     nas: "alert.oiba.de"
-    dmz: "alert.sauna.re"
+    # dmz: "alert.sauna.re"
     prometheus_exporter: true
   authelia:
     dmz: "auth.sauna.re"
@@ -252,6 +246,10 @@ endpoints:
         timeout: 30        # Request timeout in seconds
         host_header: ""    # Custom Host header
         resolution: "IPv4" # Force IPv4/IPv6 resolution
+  gpt-researcher:
+    dmz:
+      - "research-api.sauna.re"
+      - "research.sauna.re"
   grafana:
     nas: "grafana.oiba.de"
   headscale:
@@ -300,6 +298,8 @@ endpoints:
     dmz: "survey.sauna.re"
   linkstack:
     dmz: "portal.sauna.re"
+  litellm:
+    dmz: "litellm.sauna.re"
   nexterm:
     nas: "ssh.oiba.de"
   nodeexporter:
@@ -315,6 +315,8 @@ endpoints:
   openmediavault:
     nas: "nas.oiba.de"
     traefik_extra_server: true
+  openwebui:
+   dmz: "chat2.sauna.re"
   opnsense:
     nas: "router.oiba.de"
     traefik_extra_server: true
@@ -339,6 +341,9 @@ endpoints:
       - "plexexporter2.oiba.de"
       - "plexexporter3.oiba.de"
     prometheus_exporter: true
+    prometheus_settings:
+      scrape_interval: "30m"
+      scrape_timeout: "10m"
   portainer:
     nas: "docker.oiba.de"
   prowlarr:
@@ -348,7 +353,7 @@ endpoints:
     prometheus_exporter: true
   prometheus:
     nas: "prom.oiba.de"
-    dmz: "prom.sauna.re"
+    # dmz: "prom.sauna.re"
     prometheus_exporter: true
   proxmox:
     nas: "vm.oiba.de"
@@ -376,19 +381,22 @@ endpoints:
     dmz: "pma.sauna.re"
   pyload:
     nas: "pyload.oiba.de"
-  qbittorrentexporter:
-    nas: "qbittorrentexporter.oiba.de"
-    prometheus_exporter: true
+  # qbittorrentexporter:
+  #   nas: "qbittorrentexporter.oiba.de"
+  #   prometheus_exporter: true
   radarr:
     dmz: "radarr.sauna.re"
   radarrexporter:
     nas: "radarrexporter.oiba.de"
     prometheus_exporter: true
+    prometheus_settings:
+      scrape_interval: "30m"
+      scrape_timeout: "10m"
   # rancher:
   #   nas: "rancher.oiba.de"
   # rclone:
   #   nas: "rclone.oiba.de"
-  #   dmz: "rclone.azure.sauna.re"
+  #   dmz: "rclone.dmz.sauna.re"
   sabnzbd:
     dmz: "usenet.sauna.re"
   sabnzbdexporter:
@@ -406,20 +414,25 @@ endpoints:
   sonarrexporter:
     nas: "sonarrexporter.oiba.de"
     prometheus_exporter: true
+    prometheus_settings:
+      scrape_interval: "30m"
+      scrape_timeout: "10m"
   spotify:
     dmz:
       - "spotify-api.sauna.re"
       - "spotify.sauna.re"
-  syncthing:
-    nas: "sync.oiba.de"
-  tandoorrecipes:
-    dmz: "recipes.sauna.re"
-    prometheus_exporter: true
+  # syncthing:
+  #   nas: "sync.oiba.de"
+  # tandoorrecipes:
+  #   dmz: "recipes.sauna.re"
+    # prometheus_exporter: true
   tautulli:
     dmz: "tulli.sauna.re"
   tautulliexporter:
     nas: "tautulliexporter.oiba.de"
     prometheus_exporter: true
+  timetagger:
+    dmz: "time.sauna.re"
   torrent:
     dmz: "torrent.sauna.re"
   traefik:
@@ -436,7 +449,6 @@ endpoints:
     prometheus_exporter: true
   uptimekuma:
     nas: "uptime.oiba.de"
-    dmz: "uptime.sauna.re"
     prometheus_exporter: true
     prometheus_settings:
       basic_auth:
@@ -457,13 +469,15 @@ endpoints:
   #   nas: "code.oiba.de"
   wallos:
     nas: "wallos.oiba.de"
-  # watchtower:
-  #   nas: "watchtower.oiba.de"
-  #   dmz: "watchtower.azure.sauna.re"
-  #   prometheus_exporter: true
-  #   prometheus_settings:
-  #     metrics_path: "/v1/metrics"
-  #     bearer_token: "{{ WATCHTOWER_HTTP_API_TOKEN }}"
+  watchtower:
+    nas: "watchtower.oiba.de"
+    dmz: "watchtower.dmz.sauna.re"
+    prometheus_exporter: true
+    prometheus_settings:
+      metrics_path: "/v1/metrics"
+      bearer_token: "{{ WATCHTOWER_HTTP_API_TOKEN }}"
+  weddingshare:
+    dmz: "franz.sauna.re"
   wizarr:
     dmz: "setup.sauna.re"
   xbackbone:

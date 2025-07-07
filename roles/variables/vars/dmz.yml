@@ -47,7 +47,7 @@ certdumper_restart_containers: plex
 
 # DOCKERPROXY_TRAEFIK
 dockerproxy_allowed_ip: 172.30.1.0/24
-dockerproxy_gid: 999
+dockerproxy_gid: 988
 
 # WATCHTOWER
 watchtower_schedule: "0 1 * * * *"
