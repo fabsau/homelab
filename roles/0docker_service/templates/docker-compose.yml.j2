@@ -216,3 +216,26 @@ networks:
     external: true
 {% endfor %}
 {% endif %}
+
+{% if volumes is defined and volumes | length > 0 %}
+### VOLUMES ###
+volumes:
+{% for volume_name, volume_def in volumes.items() %}
+  {{ volume_name }}:
+{%   for option, value in volume_def.items() %}
+{%     if value is mapping %}
+    {{ option }}:
+{%       for sub_option, sub_value in value.items() %}
+      {{ sub_option }}: "{{ sub_value }}"
+{%       endfor %}
+{%     elif value is sequence and not (value is string) %}
+    {{ option }}:
+{%       for item in value %}
+      - "{{ item }}"
+{%       endfor %}
+{%     else %}
+    {{ option }}: "{{ value }}"
+{%     endif %}
+{%   endfor %}
+{% endfor %}
+{% endif %}
