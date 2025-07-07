@@ -1,0 +1,26 @@
+# vars/main.yml
+
+services:
+  - name: weddingshare
+    image: cirx08/wedding_share:latest
+    env_file:
+      - ./weddingshare.env
+    networks:
+      - weddingshare
+    volumes:
+      - ./config:/app/config
+      - /nfs/pictures/weddingshare/DataProtection-Key:/root/.aspnet/DataProtection-Keys
+      - /nfs/pictures/weddingshare/thumbnails:/app/wwwroot/thumbnails
+      - /nfs/pictures/weddingshare/uploads:/app/wwwroot/uploads
+      - /nfs/pictures/weddingshare/custom_resources:/app/wwwroot/custom_resources
+    traefik: 
+      - name: weddingshare
+        protocol: http
+        entrypoint: https
+        http_redirection: true
+        enable_tls: true
+        rule: "Host(`{{ endpoints[role_specific][ansible_facts['hostname']] }}`)"
+        middlewares: public-chain@file
+        insecuretransport: false
+        service_port: 5000
+    watchtower: true
