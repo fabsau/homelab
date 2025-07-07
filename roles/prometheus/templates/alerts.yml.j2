@@ -81,7 +81,7 @@ groups:
           description: '{% raw %}{{ $labels.device }} on {{ $labels.instance }} has {{ printf "%.2f" $value }}% left!{% endraw %}'
       # Alert for host swap filling up
       - alert: HostSwapLow
-        expr: (node_memory_SwapFree_bytes / node_memory_SwapTotal_bytes) * 100 < 10
+        expr: ( (node_memory_SwapFree_bytes + node_memory_SwapCached_bytes) / node_memory_SwapTotal_bytes ) * 100 < 3
         for: 30m
         labels:
           severity: information
