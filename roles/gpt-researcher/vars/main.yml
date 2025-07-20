@@ -24,6 +24,15 @@ services:
         service_port: 8000
     watchtower: true
 
+  - name: gpt-researcher-mcp
+    image: codeligence/gptr-mcp:latest
+    env_file:
+      - ./gpt-researcher.env
+    networks:
+      - librechat
+    watchtower: true
+
+
   - name: gpt-researcher-nextjs
     image: gptresearcher/gptr-nextjs:latest
     depends_on:
