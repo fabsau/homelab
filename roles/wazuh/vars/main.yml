@@ -1,0 +1,127 @@
+# vars/main.yml
+
+services:
+  - name: wazuh-manager
+    image: wazuh/wazuh-manager:latest
+    depends_on:
+      - wazuh-indexer
+    networks:
+      - traefik
+    environment:
+      - INDEXER_URL=https://wazuh.indexer:9200
+      - INDEXER_USERNAME=admin
+      - INDEXER_PASSWORD=admin
+      - FILEBEAT_SSL_VERIFICATION_MODE=full
+      - SSL_CERTIFICATE_AUTHORITIES=/etc/ssl/root-ca.pem
+      - SSL_CERTIFICATE=/etc/ssl/filebeat.pem
+      - SSL_KEY=/etc/ssl/filebeat.key
+      - API_USERNAME=wazuh-wui
+      - API_PASSWORD=MyS3cr37P450r.*-
+    volumes:
+      - /docker/wazuh/manager/api_configuration:/var/ossec/api/configuration
+      - /docker/wazuh/manager/etc:/var/ossec/etc
+      - /docker/wazuh/manager/logs:/var/ossec/logs
+      - /docker/wazuh/manager/queue:/var/ossec/queue
+      - /docker/wazuh/manager/var_multigroups:/var/ossec/var/multigroups
+      - /docker/wazuh/manager/integrations:/var/ossec/integrations
+      - /docker/wazuh/manager/active-response:/var/ossec/active-response/bin
+      - /docker/wazuh/manager/agentless:/var/ossec/agentless
+      - /docker/wazuh/manager/wodles:/var/ossec/wodles
+      - /docker/wazuh/filebeat/etc:/etc/filebeat
+      - /docker/wazuh/filebeat/var:/var/lib/filebeat
+      - ./config/wazuh_indexer_ssl_certs/root-ca-manager.pem:/etc/ssl/root-ca.pem:ro
+      - ./config/wazuh_indexer_ssl_certs/wazuh.manager.pem:/etc/ssl/filebeat.pem:ro
+      - ./config/wazuh_indexer_ssl_certs/wazuh.manager-key.pem:/etc/ssl/filebeat.key:ro
+      - ./config/wazuh_cluster/wazuh_manager.conf:/wazuh-config-mount/etc/ossec.conf:ro
+    watchtower: true
+
+  - name: wazuh-indexer
+    image: wazuh/wazuh-indexer:5.0.0
+    networks:
+      - traefik
+    environment:
+      - OPENSEARCH_JAVA_OPTS=-Xms1g -Xmx1g
+      - bootstrap.memory_lock=true
+      - NODE_NAME=wazuh.indexer
+      - CLUSTER_INITIAL_MASTER_NODES=wazuh.indexer
+      - CLUSTER_NAME=wazuh-cluster
+      - PATH_DATA=/var/lib/wazuh-indexer
+      - PATH_LOGS=/var/log/wazuh-indexer
+      - HTTP_PORT=9200-9299
+      - TRANSPORT_TCP_PORT=9300-9399
+      - COMPATIBILITY_OVERRIDE_MAIN_RESPONSE_VERSION=true
+      - PLUGINS_SECURITY_SSL_HTTP_PEMCERT_FILEPATH=/usr/share/wazuh-indexer/certs/wazuh.indexer.pem
+      - PLUGINS_SECURITY_SSL_HTTP_PEMKEY_FILEPATH=/usr/share/wazuh-indexer/certs/wazuh.indexer.key
+      - PLUGINS_SECURITY_SSL_HTTP_PEMTRUSTEDCAS_FILEPATH=/usr/share/wazuh-indexer/certs/root-ca.pem
+      - PLUGINS_SECURITY_SSL_TRANSPORT_PEMCERT_FILEPATH=/usr/share/wazuh-indexer/certs/wazuh.indexer.pem
+      - PLUGINS_SECURITY_SSL_TRANSPORT_PEMKEY_FILEPATH=/usr/share/wazuh-indexer/certs/wazuh.indexer.key
+      - PLUGINS_SECURITY_SSL_TRANSPORT_PEMTRUSTEDCAS_FILEPATH=/usr/share/wazuh-indexer/certs/root-ca.pem
+      - PLUGINS_SECURITY_SSL_HTTP_ENABLED=true
+      - PLUGINS_SECURITY_SSL_TRANSPORT_ENFORCE_HOSTNAME_VERIFICATION=false
+      - PLUGINS_SECURITY_SSL_TRANSPORT_RESOLVE_HOSTNAME=false
+      - PLUGINS_SECURITY_AUTHCZ_ADMIN_DN=CN=admin,OU=Wazuh,O=Wazuh,L=California,C=US
+      - PLUGINS_SECURITY_CHECK_SNAPSHOT_RESTORE_WRITE_PRIVILEGES=true
+      - PLUGINS_SECURITY_ENABLE_SNAPSHOT_RESTORE_PRIVILEGE=true
+      - PLUGINS_SECURITY_NODES_DN=CN=wazuh.indexer,OU=Wazuh,O=Wazuh,L=California,C=US
+      - PLUGINS_SECURITY_RESTAPI_ROLES_ENABLED=["all_access","security_rest_api_access"]
+      - PLUGINS_SECURITY_SYSTEM_INDICES_ENABLED=true
+      - PLUGINS_SECURITY_SYSTEM_INDICES_INDICES=[".opendistro-alerting-config",".opendistro-alerting-alert*",".opendistro-anomaly-results*",".opendistro-anomaly-detector*",".opendistro-anomaly-checkpoints",".opendistro-anomaly-detection-state",".opendistro-reports-*",".opendistro-notifications-*",".opendistro-notebooks",".opensearch-observability",".opendistro-asynchronous-search-response*",".replication-metadata-store"]
+      - PLUGINS_SECURITY_ALLOW_DEFAULT_INIT_SECURITYINDEX=true
+      - CLUSTER_ROUTING_ALLOCATION_DISK_THRESHOLD_ENABLED=false
+    volumes:
+      - /docker/wazuh/indexer/data:/var/lib/wazuh-indexer
+      - /docker/wazuh/indexer/logs:/var/log/wazuh-indexer
+      - ./config/wazuh_indexer_ssl_certs/root-ca.pem:/usr/share/wazuh-indexer/certs/root-ca.pem:ro
+      - ./config/wazuh_indexer_ssl_certs/wazuh.indexer-key.pem:/usr/share/wazuh-indexer/certs/wazuh.indexer.key:ro
+      - ./config/wazuh_indexer_ssl_certs/wazuh.indexer.pem:/usr/share/wazuh-indexer/certs/wazuh.indexer.pem:ro
+      - ./config/wazuh_indexer_ssl_certs/admin.pem:/usr/share/wazuh-indexer/certs/admin.pem:ro
+      - ./config/wazuh_indexer_ssl_certs/admin-key.pem:/usr/share/wazuh-indexer/certs/admin-key.pem:ro
+    watchtower: true
+
+  - name: wazuh-dashboard
+    image: wazuh/wazuh-dashboard:5.0.0
+    hostname: wazuh.dashboard
+    depends_on:
+      - wazuh.indexer
+      - wazuh.manager
+    networks:
+      - traefik
+    environment:
+      - WAZUH_API_URL=https://wazuh.manager
+      - DASHBOARD_USERNAME=kibanaserver
+      - DASHBOARD_PASSWORD=kibanaserver
+      - API_USERNAME=wazuh-wui
+      - API_PASSWORD=MyS3cr37P450r.*-
+      - SERVER_HOST=0.0.0.0
+      - SERVER_PORT=5601
+      - OPENSEARCH_HOSTS=https://wazuh.indexer:9200
+      - OPENSEARCH_SSL_VERIFICATIONMODE=certificate
+      - OPENSEARCH_REQUESTHEADERSALLOWLIST=["securitytenant","Authorization"]
+      - OPENSEARCH_SECURITY_MULTITENANCY_ENABLED=false
+      - SERVER_SSL_ENABLED=true
+      - OPENSEARCH_SECURITY_READONLY_MODE_ROLES=["kibana_read_only"]
+      - SERVER_SSL_KEY=/usr/share/wazuh-dashboard/certs/wazuh-dashboard-key.pem
+      - SERVER_SSL_CERTIFICATE=/usr/share/wazuh-dashboard/certs/wazuh-dashboard.pem
+      - OPENSEARCH_SSL_CERTIFICATEAUTHORITIES=["/usr/share/wazuh-dashboard/certs/root-ca.pem"]
+      - UISETTINGS_OVERRIDES_DEFAULTROUTE=/app/wz-home
+    volumes:
+      - /docker/wazuh/dashboard/config:/usr/share/wazuh-dashboard/data/wazuh/config
+      - /docker/wazuh/dashboard/custom:/usr/share/wazuh-dashboard/plugins/wazuh/public/assets/custom
+      - /docker/certdumper/ssl/oiba.de/cert.pem:/usr/share/wazuh-dashboard/certs/wazuh-dashboard.pem:ro
+      - /docker/certdumper/ssl/oiba.de/key.pem:/usr/share/wazuh-dashboard/certs/wazuh-dashboard-key.pem:ro
+      - ./config/wazuh_indexer_ssl_certs/root-ca.pem:/usr/share/wazuh-dashboard/certs/root-ca.pem:ro
+      - ./config/wazuh_dashboard/wazuh.yml:/wazuh-config-mount/data/wazuh/config/wazuh.yml:ro
+    traefik:
+      - name: wazuh-dashboard
+        protocol: http
+        entrypoint: https
+        rule: "Host(`wazuh.oiba.de`)"
+        http_redirection: true
+        enable_tls: true
+        insecuretransport: false
+        service_port: 5601
+    watchtower: true
+
+# Define the common network to be used for all services
+desired_networks:
+  - traefik
