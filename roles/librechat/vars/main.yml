@@ -10,6 +10,7 @@ services:
       - librechat-rag_api
     env_file:
       - ./librechat.env
+      - ./librechat-rag_api.env
     volumes:
       - ./config:/config
       - ./data/images:/app/client/public/images
@@ -69,7 +70,7 @@ services:
       - librechat
     watchtower: true
 
-  
+
 config_files_settings:
   role_owner: 1000
   role_group: 1000

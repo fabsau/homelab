@@ -1,60 +1,62 @@
-version: 1.1.4
+version: 1.2.1
 
 cache: true
 
 endpoints:
   azureOpenAI:
     titleConvo: true
-    titleModel: "gpt-4o-mini"
+    titleModel: "gpt-4.1-mini_SMALL"
     assistants: false # Agents are better
     plugins: true
     agents:
       recursionLimit: 50
       disableBuilder: false
     groups:
-{# - group: "EastUS"
-  apiKey: "{{ OPENAI_AZURE_API_KEY_2 }}"
-  instanceName: "{{ OPENAI_AZURE_INSTANCENAME_2 }}"
-  version: "{{ OPENAI_AZURE_API_VERSION }}"
-  models:
-  gpt-4o:
-    deploymentName: "gpt-4o" #}
-      - group: "Sweden"
-        apiKey: "{{ OPENAI_AZURE_API_KEY_1 }}"
-        instanceName: "{{ OPENAI_AZURE_INSTANCENAME_1 }}"
-        version: "{{ OPENAI_AZURE_API_VERSION }}"
+      - group: "Sweden-Normal"
+        apiKey: "{{ AZURE_API_KEY }}"
+        instanceName: "{{ AZURE_BASE_OPENAI_URL }}"
+        version: "{{ AZURE_API_VERSION }}"
         models:
-          gpt-4o:
-            deploymentName: "gpt-4o"
-          gpt-4o-mini:
-            deploymentName: "gpt-4o-mini"
+          gpt-4.1_NORMAL:
+            deploymentName: "gpt-4.1"
       - group: "Sweden-Reasoning"
-        apiKey: "009bc3df116048fb90aa6793e16bce47"
-        instanceName: "saunachatse"
-        version: "2024-12-01-preview"
-        dropParams: ["stream", "temperature", "top_p", "presence_penalty", "frequency_penalty", "best_of", "max_tokens", "stop"]
+        apiKey: "{{ AZURE_API_KEY }}"
+        instanceName: "{{AZURE_BASE_OPENAI_URL }}"
+        version: "{{ AZURE_API_VERSION }}"
+        dropParams: ["stream_options", "stream", "temperature", "top_p", "presence_penalty", "frequency_penalty", "best_of", "max_tokens", "stop"]
         models:
-          o3-mini:
+          o4-mini_SMARTEST:
+            deploymentName: "o4-mini"
+          o3-mini_SMART:
             deploymentName: "o3-mini"
-          o1:
-            deploymentName: "o1"   
-{# whisper:
-  deploymentName: whisper-01 #}
-      {# - group: "llama-70b-chat"
-        apiKey: "{{ OPENAI_AZURE_LLAMA_API_KEY }}"
-        baseURL: "https://Meta-Llama-3-70B-Instruct-qekul-serverless.swedencentral.inference.ai.azure.com/v1/chat/completions"
-        serverless: true
+      - group: "Sweden"
+        apiKey: "{{ AZURE_API_KEY }}"
+        instanceName: "{{ AZURE_BASE_OPENAI_URL }}"
+        version: "{{ AZURE_API_VERSION }}"
         models:
-          llama-70b-chat: true #}
-      {# - group: "mistral-inference"
-        apiKey: "{{ OPENAI_AZURE_MISTRAL_API_KEY }}"
-        baseURL: "https://Mistral-large-tfrvw-serverless.swedencentral.inference.ai.azure.com/v1/chat/completions"
-        serverless: true
-        models:
-          mistral-large-chat: true #}
+          gpt-4.1-mini_SMALL:
+            deploymentName: "gpt-4.1-mini"
+          gpt-4.1-nano_STUPID:
+            deploymentName: "gpt-4.1-nano"
 
-{# See the Custom Configuration Guide for more information:
-https://docs.librechat.ai/install/configuration/custom_config.html #}
+  custom:
+    - name: "LiteLLM"
+      apiKey: "{{ LITELLM_API_LIBRECHAT }}"
+      baseURL: "https://{{ endpoints.litellm.dmz }}" 
+      models:
+        default:
+          - "gpt-4.1"
+          - "o4-mini"
+          - "o3-mini"
+          - "gpt-4.1-mini"
+          - "gpt-4.1-nano"
+        fetch: false
+      titleConvo: true
+      titleModel: "gpt-4.1-mini"
+      summarize: false
+      forcePrompt: false
+      modelDisplayLabel: "LiteLLM"
+
 
 speech:
   speechTab:
@@ -73,50 +75,23 @@ speech:
       cacheTTS: true
   stt:
     azureOpenAI:
-      instanceName: "{{ OPENAI_AZURE_INSTANCENAME_1 }}"
-      apiKey: "{{ OPENAI_AZURE_API_KEY_1 }}"
+      instanceName: "{{ AZURE_BASE_OPENAI_URL }}"
+      apiKey: "{{ AZURE_API_KEY }}"
       deploymentName: "whisper-01"
-      apiVersion: "{{ OPENAI_AZURE_API_VERSION }}"
+      apiVersion: "{{ AZURE_API_VERSION }}"
   tts:
     azureOpenAI:
-      instanceName: "{{ OPENAI_AZURE_INSTANCENAME_1 }}"
-      apiKey: "{{ OPENAI_AZURE_API_KEY_1 }}"
+      instanceName: "{{ AZURE_BASE_OPENAI_URL }}"
+      apiKey: "{{ AZURE_API_KEY }}"
       deploymentName: "tts-hd"
-      apiVersion: "{{ OPENAI_AZURE_API_VERSION }}"
+      apiVersion: "{{ AZURE_API_VERSION }}"
       model: "tts-hd"
       voices: ['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer']
-{# modelSpecs:
-  enforce: false
-  prioritize: false
-  list:
-    - name: "gpt-4o"
-      label: "gpt-4o"
-      preset:
-        endpoint: "azureOpenAI"
-        model: "gpt-4o"
-        temperature: 0.7
-    - name: "o1"
-      label: "o1"
-      preset:
-        endpoint: "azureOpenAI"
-        model: "o1"
-        temperature: 1
-    - name: "o1-mini"
-      label: "o1-mini"
-      preset:
-        endpoint: "azureOpenAI"
-        model: "o1-mini"
-        temperature: 1
-    - name: "gpt-4o-mini"
-      label: "gpt-4o-mini"
-      preset:
-        endpoint: "azureOpenAI"
-        model: "gpt-4o-mini"
-        temperature: 0.7
 
-interface:
-  endpointsMenu: true
-  modelSelect: true
-  parameters: true
-  presets: true #}
-
+webSearch:
+  {# searxngInstanceUrl: "${CUSTOM_SEARXNG_INSTANCE_URL}"
+  searxngApiKey: "${CUSTOM_SEARXNG_API_KEY}"
+  firecrawlApiKey: "${CUSTOM_FIRECRAWL_API_KEY}"
+  firecrawlApiUrl: "${CUSTOM_FIRECRAWL_API_URL}"
+  cohereApiKey: "${CUSTOM_COHERE_API_KEY}" #}
+  safeSearch: 0
