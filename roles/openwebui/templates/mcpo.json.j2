@@ -1,0 +1,40 @@
+{
+  "mcpServers": {
+    "time": {     
+      "command": "uvx",     
+      "args": ["mcp-server-time", "--local-timezone=Europe/Vienna"]   
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    },
+    "firecrawl": {
+      "command": "npx",
+      "args": ["-y", "firecrawl-mcp"],
+      "env": {
+        "FIRECRAWL_API_KEY": "{{ FIRECRAWL_API_KEY }}",
+        "FIRECRAWL_API_URL": "{{ endpoints.firecrawl.dmz.0 }}",
+        "SSE_LOCAL": "false"
+      }
+    },
+    "gpt-researcher": {
+      "type": "sse",
+      "url": "http://gpt-researcher-mcp:8000/sse"
+    },
+    "taskmaster-ai": {
+      "command": "npx",
+      "args": ["-y", "--package=task-master-ai", "task-master-ai"],
+      "env": {
+        "OPENAI_BASE_URL": "{{ endpoints.litellm.dmz }}",
+        "OPENAI_API_KEY": "{{ LITELLM_API_OPENWEBUI }}"
+      }
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ]
+    }
+  }
+}
