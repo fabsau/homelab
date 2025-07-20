@@ -146,3 +146,11 @@ sudo systemctl stop systemd-resolved
 sudo systemctl disable systemd-resolved
 sudo rm /etc/resolv.conf
 echo -e "nameserver 192.168.100.20\nnameserver 127.0.0.1\nnameserver 192.168.100.21\n search ." | sudo tee /etc/resolv.conf
+
+# Proxmox New Node Setup
+apt install htop lm-sensors lshw powertop
+sensors-detect
+powertop --auto-tune
+wget https://raw.githubusercontent.com/notthebee/AutoASPM/refs/heads/main/autoaspm.py
+python3 autoaspm.py
+lspci -vv | awk '/ASPM/{print $0}' RS= | grep --color -P '(^[a-z0-9:.]+|ASPM )'
