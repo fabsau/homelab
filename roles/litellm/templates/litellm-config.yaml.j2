@@ -1,84 +1,410 @@
 model_list:
+  # Chat
+  - model_name: model-router
+    litellm_params:
+      model: azure/model-router
+      api_base: "os.environ/AZURE_SERVICES_URL"
+      api_key: "os.environ/AZURE_API_KEY"
+      api_version: "{{ AZURE_API_VERSION }}"
+    model_info:
+      mode: chat
+
   - model_name: o4-mini
     litellm_params:
       model: azure/o4-mini
-      api_base: "os.environ/AZURE_API_BASE"
+      api_base: "os.environ/AZURE_OPENAI_URL"
       api_key: "os.environ/AZURE_API_KEY"
       api_version: "{{ AZURE_API_VERSION }}"
+    model_info:
+      mode: chat
+      key: azure/o4-mini
+      max_tokens: 100000
+      max_input_tokens: 200000
+      max_output_tokens: 100000
+      input_cost_per_token: 1.1e-06
+      output_cost_per_token: 4.4e-06
+      cache_read_input_token_cost: 2.75e-07
+      litellm_provider: azure
+      supported_endpoints:
+        - /v1/chat/completions
+        - /v1/batch
+        - /v1/responses
+      supported_modalities:
+        - text
+        - image
+      supported_output_modalities:
+        - text
+      supports_function_calling: true
+      supports_parallel_function_calling: false
+      supports_vision: true
+      supports_prompt_caching: true
+      supports_response_schema: true
+      supports_reasoning: true
+      supports_tool_choice: true
+
   - model_name: o3-mini
     litellm_params:
       model: azure/o3-mini
-      api_base: "os.environ/AZURE_API_BASE"
+      api_base: "os.environ/AZURE_OPENAI_URL"
       api_key: "os.environ/AZURE_API_KEY"
       api_version: "{{ AZURE_API_VERSION }}"
+    model_info:
+      mode: chat
+      key: azure/o3-mini
+      max_tokens: 100000
+      max_input_tokens: 200000
+      max_output_tokens: 100000
+      input_cost_per_token: 1.1e-06
+      output_cost_per_token: 4.4e-06
+      cache_read_input_token_cost: 5.5e-07
+      litellm_provider: azure
+      supports_vision: false
+      supports_prompt_caching: true
+      supports_reasoning: true
+      supports_response_schema: true
+      supports_tool_choice: true
+
   - model_name: gpt-4.1
     litellm_params:
       model: azure/gpt-4.1
-      api_base: "os.environ/AZURE_API_BASE"
+      api_base: "os.environ/AZURE_OPENAI_URL"
       api_key: "os.environ/AZURE_API_KEY"
       api_version: "{{ AZURE_API_VERSION }}"
+    model_info:
+      mode: chat
+      key: azure/gpt-4.1
+      max_tokens: 32768
+      max_input_tokens: 1047576
+      max_output_tokens: 32768
+      input_cost_per_token: 2e-06
+      output_cost_per_token: 8e-06
+      input_cost_per_token_batches: 1e-06
+      output_cost_per_token_batches: 4e-06
+      cache_read_input_token_cost: 5e-07
+      litellm_provider: azure
+      supported_endpoints:
+        - /v1/chat/completions
+        - /v1/batch
+        - /v1/responses
+      supported_modalities:
+        - text
+        - image
+      supported_output_modalities:
+        - text
+      supports_function_calling: true
+      supports_parallel_function_calling: true
+      supports_response_schema: true
+      supports_vision: true
+      supports_prompt_caching: true
+      supports_system_messages: true
+      supports_tool_choice: true
+      supports_native_streaming: true
+      supports_web_search: true
+      search_context_cost_per_query:
+        search_context_size_low: 0.03
+        search_context_size_medium: 0.035
+        search_context_size_high: 0.05
+
   - model_name: gpt-4.1-mini
     litellm_params:
       model: azure/gpt-4.1-mini
-      api_base: "os.environ/AZURE_API_BASE"
+      api_base: "os.environ/AZURE_OPENAI_URL"
       api_key: "os.environ/AZURE_API_KEY"
       api_version: "{{ AZURE_API_VERSION }}"
+    model_info:
+      mode: chat
+      key: azure/gpt-4.1-mini
+      max_tokens: 32768
+      max_input_tokens: 1047576
+      max_output_tokens: 32768
+      input_cost_per_token: 4e-07
+      output_cost_per_token: 1.6e-06
+      input_cost_per_token_batches: 2e-07
+      output_cost_per_token_batches: 8e-07
+      cache_read_input_token_cost: 1e-07
+      litellm_provider: azure
+      supported_endpoints:
+        - /v1/chat/completions
+        - /v1/batch
+        - /v1/responses
+      supported_modalities:
+        - text
+        - image
+      supported_output_modalities:
+        - text
+      supports_function_calling: true
+      supports_parallel_function_calling: true
+      supports_response_schema: true
+      supports_vision: true
+      supports_prompt_caching: true
+      supports_system_messages: true
+      supports_tool_choice: true
+      supports_native_streaming: true
+      supports_web_search: true
+      search_context_cost_per_query:
+        search_context_size_low: 0.025
+        search_context_size_medium: 0.0275
+        search_context_size_high: 0.03
+
   - model_name: gpt-4.1-nano
     litellm_params:
       model: azure/gpt-4.1-nano
-      api_base: "os.environ/AZURE_API_BASE"
+      api_base: "os.environ/AZURE_OPENAI_URL"
       api_key: "os.environ/AZURE_API_KEY"
       api_version: "{{ AZURE_API_VERSION }}"
+    model_info:
+      mode: chat
+      key: azure/gpt-4.1-nano
+      max_tokens: 32768
+      max_input_tokens: 1047576
+      max_output_tokens: 32768
+      input_cost_per_token: 1e-07
+      output_cost_per_token: 4e-07
+      input_cost_per_token_batches: 5e-08
+      output_cost_per_token_batches: 2e-07
+      cache_read_input_token_cost: 2.5e-08
+      litellm_provider: azure
+      supported_endpoints:
+        - /v1/chat/completions
+        - /v1/batch
+        - /v1/responses
+      supported_modalities:
+        - text
+        - image
+      supported_output_modalities:
+        - text
+      supports_function_calling: true
+      supports_parallel_function_calling: true
+      supports_response_schema: true
+      supports_vision: true
+      supports_prompt_caching: true
+      supports_system_messages: true
+      supports_tool_choice: true
+      supports_native_streaming: true
+
+  - model_name: DeepSeek-R1-0528
+    litellm_params:
+      model: azure/DeepSeek-R1-0528
+      api_base: "os.environ/AZURE_OPENAI_URL"
+      api_key: "os.environ/AZURE_API_KEY"
+      api_version: "{{ AZURE_API_VERSION }}"
+    model_info:
+      mode: chat
+      key: openrouter/deepseek/deepseek-r1-0528
+      max_tokens: 8192
+      max_input_tokens: 65336
+      max_output_tokens: 8192
+      litellm_provider: azure
+      supports_function_calling: true
+      supports_assistant_prefill: true
+      supports_reasoning: true
+      supports_tool_choice: true
+      supports_prompt_caching: true
+
+  - model_name: grok-3
+    litellm_params:
+      model: azure/grok-3
+      api_base: "os.environ/AZURE_OPENAI_URL"
+      api_key: "os.environ/AZURE_API_KEY"
+      api_version: "{{ AZURE_API_VERSION }}"
+    model_info:
+      mode: chat
+      key: xai/grok-3
+      max_tokens: 131072
+      max_input_tokens: 131072
+      max_output_tokens: 131072
+      input_cost_per_token: 3e-06
+      output_cost_per_token: 1.5e-05
+      litellm_provider: azure
+      supports_function_calling: true
+      supports_tool_choice: true
+      supports_response_schema: false
+      source: https://x.ai/api#pricing
+      supports_web_search: true
+
+  # Embedding
   - model_name: text-embedding-3-large
     litellm_params:
-      model: azure/text-embedding-3-large
-      api_base: "os.environ/AZURE_API_BASE"
+      model: azure_ai/text-embedding-3-large
+      api_base: "os.environ/AZURE_OPENAI_URL"
       api_key: "os.environ/AZURE_API_KEY"
       api_version: "{{ AZURE_API_VERSION }}"
-  - model_name: Codestral-2501
+    model_info:
+      mode: embedding
+      key: azure/text-embedding-3-large
+      max_tokens: 8191
+      max_input_tokens: 8191
+      input_cost_per_token: 1.3e-07
+      output_cost_per_token: 0.0
+      litellm_provider: azure
+
+  - model_name: embed-v-4-0
     litellm_params:
-      model: azure/responses/Codestral-2501-enrrs
-      api_base: "os.environ/AZURE_API_BASE"
+      model: azure/embed-v-4-0
+      api_base: "os.environ/AZURE_FOUNDRY_URL"
       api_key: "os.environ/AZURE_API_KEY"
+      api_version: "{{ AZURE_API_VERSION }}"
+    model_info:
+      mode: embedding
+      key: azure_ai/embed-v-4-0
+      max_tokens: 128000
+      max_input_tokens: 128000
+      output_vector_size: 3072
+      input_cost_per_token: 1.2e-07
+      output_cost_per_token: 0.0
+      litellm_provider: azure_ai
+      supports_embedding_image_input: true
+      supported_endpoints:
+        - /v1/embeddings
+      supported_modalities:
+        - text
+        - image
+      source: https://azuremarketplace.microsoft.com/pt-br/marketplace/apps/cohere.cohere-embed-4-offer?tab=PlansAndPrice
+
   - model_name: Cohere-rerank-v3-5
     litellm_params:
-      model: azure_ai/Cohere-rerank-v3-5-vnddr
-      api_base: "os.environ/AZURE_RERANK_BASE"
+      model: azure_ai/Cohere-rerank-v3-5-lyijn
+      api_base: "os.environ/AZURE_RERANK_URL"
       api_key: "os.environ/AZURE_RERANK_API_KEY"
+    model_info:
+      mode: rerank
+      key: azure_ai/cohere-rerank-v3.5
+      max_tokens: 4096
+      max_input_tokens: 4096
+      max_output_tokens: 4096
+      max_query_tokens: 2048
+      input_cost_per_token: 0.0
+      input_cost_per_query: 0.002
+      output_cost_per_token: 0.0
+      litellm_provider: azure_ai
+
+  # Coding
+  - model_name: Codestral-2501
+    litellm_params:
+      model: azure/Codestral-2501
+      api_base: "os.environ/AZURE_FOUNDRY_URL"
+      api_key: "os.environ/AZURE_API_KEY"
+    model_info:
+      mode: chat
+      key: vertex_ai/codestral-2501
+      max_tokens: 128000
+      max_input_tokens: 128000
+      max_output_tokens: 128000
+      input_cost_per_token: 2e-07
+      output_cost_per_token: 6e-07
+      litellm_provider: vertex_ai-mistral_models
+      supports_function_calling: true
+      supports_tool_choice: true
+
+  # Speech to Text (STT)
   - model_name: gpt-4o-transcribe
     litellm_params:
-      model: azure/gpt-4o-transcribe
-      api_base: "os.environ/AZURE_API_BASE"
+      model: azure_ai/gpt-4o-transcribe
+      api_base: "os.environ/AZURE_OPENAI_URL"
       api_key: "os.environ/AZURE_API_KEY"
       api_version: "{{ AZURE_API_VERSION }}"
     model_info:
       mode: audio_transcription
-  - model_name: whisper-01
+      key: azure/gpt-4o-transcribe
+      max_input_tokens: 16000
+      max_output_tokens: 2000
+      input_cost_per_token: 2.5e-06
+      input_cost_per_audio_token: 6e-06
+      output_cost_per_token: 1e-05
+      litellm_provider: azure
+      supported_endpoints:
+        - /v1/audio/transcriptions
+
+  - model_name: gpt-4o-mini-transcribe
     litellm_params:
-      model: azure/whisper-01
-      api_base: "os.environ/AZURE_API_BASE"
+      model: azure_ai/gpt-4o-mini-transcribe
+      api_base: "os.environ/AZURE_OPENAI_URL"
       api_key: "os.environ/AZURE_API_KEY"
       api_version: "{{ AZURE_API_VERSION }}"
     model_info:
       mode: audio_transcription
+      key: azure/gpt-4o-mini-transcribe
+      max_input_tokens: 16000
+      max_output_tokens: 2000
+      input_cost_per_token: 1.25e-06
+      input_cost_per_audio_token: 3e-06
+      output_cost_per_token: 5e-06
+      litellm_provider: azure
+      supported_endpoints:
+        - /v1/audio/transcriptions
+
+  - model_name: whisper
+    litellm_params:
+      model: azure/whisper
+      api_base: "os.environ/AZURE_OPENAI_URL"
+      api_key: "os.environ/AZURE_API_KEY"
+      api_version: "{{ AZURE_API_VERSION }}"
+    model_info:
+      mode: audio_transcription
+      key: azure/whisper-1
+      input_cost_per_second: 0.0001
+      output_cost_per_second: 0.0001
+      litellm_provider: azure
+
+  # Text to Speech (TTS)
   - model_name: gpt-4o-mini-tts
     litellm_params:
-      model: azure/gpt-4o-mini-tts
-      api_base: "os.environ/LITELLM_GPT4o_TTS_URL"
-      api_key: "os.environ/LITELLM_GPT4o_TTS_API_KEY"
+      model: azure_ai/gpt-4o-mini-tts
+      api_base: "os.environ/AZURE_GPT4o_TTS_URL"
+      api_key: "os.environ/AZURE_GPT4o_TTS_API_KEY"
       api_version: "{{ AZURE_API_VERSION }}"
+    model_info:
+      mode: audio_speech
+      key: azure/gpt-4o-mini-tts
+      input_cost_per_token: 2.5e-06
+      output_cost_per_token: 1e-05
+      output_cost_per_audio_token: 1.2e-05
+      output_cost_per_second: 0.00025
+      litellm_provider: azure
+      supported_modalities:
+        - text
+        - audio
+      supported_output_modalities:
+        - audio
+      supported_endpoints:
+        - /v1/audio/speech
+
   - model_name: tts-hd
     litellm_params:
       model: azure/tts-hd
-      api_base: "os.environ/AZURE_API_BASE"
+      api_base: "os.environ/AZURE_OPENAI_URL"
       api_key: "os.environ/AZURE_API_KEY"
       api_version: "{{ AZURE_API_VERSION }}"
+    model_info:
+      mode: audio_speech
+      key: azure/tts-1-hd
+      input_cost_per_character: 3e-05
+      litellm_provider: azure
+
+  - model_name: tts
+    litellm_params:
+      model: azure/tts
+      api_base: "os.environ/AZURE_OPENAI_URL"
+      api_key: "os.environ/AZURE_API_KEY"
+      api_version: "{{ AZURE_API_VERSION }}"
+    model_info:
+      mode: audio_speech
+      key: azure/tts-1
+      input_cost_per_character: 1.5e-05
+      litellm_provider: azure
+
+  # Image
   - model_name: dall-e-3
     litellm_params:
       model: azure/dall-e-3
-      api_base: "os.environ/AZURE_API_BASE"
+      api_base: "os.environ/AZURE_OPENAI_URL"
       api_key: "os.environ/AZURE_API_KEY"
       api_version: "{{ AZURE_API_VERSION }}"
       base_model: dall-e-3
+      size: 1024x1024
     model_info:
-        mode: image_generation
+      mode: image_generation
+      key: azure/standard/1024-x-1024/dall-e-3
+      input_cost_per_pixel: 3.81469e-08
+      output_cost_per_token: 0.0
+      litellm_provider: azure
