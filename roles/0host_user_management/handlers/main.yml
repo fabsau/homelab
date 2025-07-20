@@ -1,6 +1,0 @@
-# /config/workspace/homelab/roles/0host_user_management/handlers/main.yml
-- name: Restart SSH Service
-  service:
-    name: "{{ ssh_service_name }}"
-    state: restarted
-  become: true

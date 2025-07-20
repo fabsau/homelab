@@ -1,4 +1,0 @@
-- name: Ensure timezone is set
-  ansible.builtin.timezone:
-    become: yes
-    name: "{{ host_timezone }}"
