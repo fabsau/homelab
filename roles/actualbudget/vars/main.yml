@@ -25,17 +25,8 @@ services:
     image: docker.io/sakowicz/actual-ai:latest
     depends_on:
       - actualbudget
-      - azure-proxy
     env_file:
       - ./actual-ai.env
-    networks:
-      - actualbudget
-    watchtower: true
-
-  - name: azure-proxy
-    image: stulzq/azure-openai-proxy:latest
-    env_file:
-      - ./azure-proxy.env
     networks:
       - actualbudget
     watchtower: true
