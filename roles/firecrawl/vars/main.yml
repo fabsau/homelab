@@ -1,0 +1,69 @@
+# vars/main.yml
+
+services:
+  - name: firecrawl-api
+    image: ghcr.io/mendableai/firecrawl
+    command: pnpm run start:production
+    ulimits:
+      nofile:
+        soft: 65535
+        hard: 65535
+    env_file:
+      - ./firecrawl-api.env
+    networks:
+      - firecrawl
+    traefik:
+      - name: firecrawl-api
+        protocol: http
+        entrypoint: https
+        http_redirection: true
+        enable_tls: true
+        rule: "Host(`{{ endpoints[role_specific][ansible_facts['hostname']][0] }}`)"
+        middlewares: private-chain@file
+        insecuretransport: false
+        service_port: 3002
+    watchtower: true
+
+  - name: firecrawl-worker
+    image: ghcr.io/mendableai/firecrawl
+    command: pnpm run start:workers
+    ulimits:
+      nofile:
+        soft: 65535
+        hard: 65535
+    depends_on:
+      - firecrawl-api
+      - firecrawl-redis
+    env_file:
+      - ./firecrawl-worker.env
+    networks:
+      - firecrawl
+    watchtower: true
+
+  - name: firecrawl-redis
+    image: redis:alpine
+    env_file:
+      - ../common.env
+    volumes:
+      - ./data/redis:/data
+    networks:
+      - firecrawl
+    watchtower: true
+
+  - name: firecrawl-playwright
+    image: ghcr.io/mendableai/playwright-service:latest
+    env_file:
+      - ./firecrawl-playwright.env
+    networks:
+      - firecrawl
+    traefik:
+      - name: firecrawl-playwright
+        protocol: http
+        entrypoint: https
+        http_redirection: true
+        enable_tls: true
+        rule: "Host(`{{ endpoints[role_specific][ansible_facts['hostname']][1] }}`)"
+        middlewares: private-chain@file
+        insecuretransport: false
+        service_port: 3000
+    watchtower: true
